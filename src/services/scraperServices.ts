@@ -13,13 +13,19 @@ async function dataScraper(data: IScraper) {
 
     const content = await page.evaluate((scraperParam) => {
       return [...document.querySelectorAll(scraperParam)].map(
-        (item) => `${item.textContent}`
+        (item) => `${item.textContent?.trim()}`
       );
     }, scraperParam);
 
-    const values = content.filter((item) =>
-      item?.toLowerCase()?.includes(filter)
-    );
+    const values = content
+      .filter((item) => item?.toLowerCase()?.includes(filter))
+      .map((item) =>
+        item
+          .replace("\n\t\t\t\n\t\t\t\t\t\t\t\t\t", "")
+          .replace("\n\t\t\t\t\t\t\t\n\t\t\t", "")
+          .replace("\n\n\t\t\n\t\t\n\t\t\t", "")
+          .replace('"', "")
+      );
 
     return values;
   } catch (error) {
