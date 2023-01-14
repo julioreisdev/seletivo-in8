@@ -25,9 +25,17 @@ async function dataScraper(data: IScraper) {
           .replace("\n\t\t\t\t\t\t\t\n\t\t\t", "")
           .replace("\n\n\t\t\n\t\t\n\t\t\t", "")
           .replace('"', "")
-      );
+      )
+      .map((item) => Object.assign({}, item.split(" ")));
 
-    return values;
+    const formatedValues = values.map((value, index) => {
+      return {
+        price: Number(value["0"].replace(/[^0-9\.]+/g, "")),
+        description: value,
+      };
+    });
+
+    return formatedValues.sort();
   } catch (error) {
     throw "Data Scraper Failed";
   }
