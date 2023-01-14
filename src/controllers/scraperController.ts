@@ -8,9 +8,8 @@ async function getScraper(req: Request, res: Response) {
     const result = await scraperServices.dataScraper(data);
     return res.status(200).send(result);
   } catch (error) {
-    console.log(error);
+    return res.status(500).send(error);
   }
-  return res.send(data);
 }
 
 const scraperController = {
